@@ -3,11 +3,9 @@
 Morse morse;
 
 void setup(){
-	morse = Morse();
+  morse = Morse();
 }
 
 void loop(){
-	morse.play('S');
-	morse.play('0');
-	morse.play('S');
+  morse.playMsg("CQ CQ CQ IZ3OHR/B JN 55LJ ARIVERONAEST BEACON FOR CW LEARNING PROJECT 73 BYE");
 }

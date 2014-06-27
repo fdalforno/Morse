@@ -20,6 +20,7 @@ class Morse{
 	uint8_t tonefreq;
 	Morse();
 	void play(char thischar);
+	void playMsg(char *stringa);
 	void setDotLenght(uint8_t dotlength);
 };
 #endif
