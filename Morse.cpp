@@ -1,4 +1,5 @@
 #include<Morse.h>
+#include<ctype.h>
 
 const  byte _morsetab[] = {
     117, //ASCII 33 !   
@@ -64,43 +65,18 @@ const  byte _morsetab[] = {
     1,   //ASCII 93 ]   
     1,   //ASCII 94 ^
     108,  //ASCII 95 _    
-    94,  //ASCII 96 `    
-    6,   //ASCII 97 a
-    17,  //ASCII 98 b
-    21,  //ASCII 99 c
-    9,   //ASCII 100 d
-    2,   //ASCII 101 e
-    20,  //ASCII 102 f
-    11,  //ASCII 103 g
-    16,  //ASCII 104 h
-    4,   //ASCII 105 i
-    30,  //ASCII 106 j
-    13,  //ASCII 107 k
-    18,  //ASCII 108 l
-    7,   //ASCII 109 m
-    5,   //ASCII 110 n
-    15,  //ASCII 111 o
-    22,  //ASCII 112 p
-    27,  //ASCII 113 q
-    10,  //ASCII 114 r
-    8,   //ASCII 115 s
-    3,   //ASCII 116 t
-    12,  //ASCII 117 u
-    24,  //ASCII 118 v
-    14,  //ASCII 119 w
-    25,  //ASCII 120 x
-    29,  //ASCII 121 y
-    19,  //ASCII 122 z
-    1,   //ASCII 123 left brace
-    1,   //ASCII 124 vertical bar
-    1,   //ASCII 125 right brace
-    1,   //ASCII 126 tilde
+    94,  //ASCII 96 '
 };
 
 
 Morse::Morse(){
 	buzzerPin = 9;
 	ledPin = 7;
+	
+	#ifdef __DEBUG_MORSE_H__
+		Serial.begin(9600);
+		while (!Serial);
+	#endif
 	
 	pinMode(buzzerPin, OUTPUT);
 	pinMode(ledPin, OUTPUT);
@@ -169,7 +145,30 @@ void Morse::soundLetter(char letter){
 		return;
 	}
 	
+	#ifdef __DEBUG_MORSE_H__
+		Serial.print("Debug carattere : ");
+		Serial.print(letter);
+	#endif
+	
+	letter = toupper(letter);
+	
+	#ifdef __DEBUG_MORSE_H__
+		Serial.print(" -> ");
+		Serial.print(letter);	
+		Serial.println("");
+	#endif
+	
 	index = ((byte) letter) - 33;
+	
+	//Controllo overflow array
+	int size = sizeof(_morsetab) / sizeof(byte);
+	if(index >=  size){
+		#ifdef __DEBUG_MORSE_H__
+			Serial.println("Errore overflow !!");
+		#endif
+		return;
+	}
+	
 	value = _morsetab[index];
 	
 	while (value != 1) {
